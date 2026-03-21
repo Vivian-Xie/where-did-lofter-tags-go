@@ -22,14 +22,27 @@
   * { box-sizing:border-box; margin:0; padding:0; }
   body { background:var(--paper); color:var(--ink); font-family:var(--serif); padding-bottom:60px; }
 
+  /* ── header ── */
   header {
     border-bottom:3px double var(--ink);
-    padding:28px 40px 22px;
-    display:flex; align-items:baseline; gap:20px; flex-wrap:wrap;
+    padding:20px 40px;
+    display:flex; align-items:center; gap:24px; flex-wrap:wrap;
   }
-  header h1 { font-size:clamp(1.6rem,3.5vw,2.4rem); font-weight:900; letter-spacing:.05em; line-height:1; }
-  header h1 span { color:var(--red); }
-  .subtitle { font-size:.82rem; color:#7a6a55; font-family:var(--mono); border-left:2px solid var(--line); padding-left:14px; line-height:1.8; }
+  .header-img {
+    height:72px; width:auto; object-fit:contain; flex-shrink:0;
+    border-radius:4px;
+  }
+  .header-title {
+    display:flex; flex-direction:column; gap:6px;
+  }
+  header h1 { font-size:clamp(1.5rem,3vw,2.2rem); font-weight:900; letter-spacing:.05em; line-height:1; }
+  header h1 span .ren{ color:var(--red); }
+  header h1 span .heng{ color:var(--green); }
+
+  .header-desc {
+    font-size:.82rem; color:#5a4a35; line-height:1.75;
+    max-width:600px;
+  }
   .last-update { margin-left:auto; font-family:var(--mono); font-size:.72rem; color:#9a8a72; text-align:right; line-height:1.8; }
 
   main { padding:28px 40px; max-width:1200px; }
@@ -39,6 +52,7 @@
     font-family:var(--mono); color:#7a6a55;
     border-bottom:1px solid var(--line); padding-bottom:7px;
     margin-bottom:18px; margin-top:36px;
+    display:flex; align-items:center; gap:12px;
   }
   .section-title:first-child { margin-top:0; }
 
@@ -55,10 +69,22 @@
   .value.green { color:var(--green); }
   .value.gold  { color:var(--gold); }
   .sub { font-size:.7rem; color:#9a8a72; margin-top:5px; font-family:var(--mono); }
-  .badge { position:absolute; top:10px; right:12px; font-size:.62rem; font-family:var(--mono); background:var(--red); color:#fff; padding:2px 7px; }
+
+  /* ── 图表控制栏 ── */
+  .chart-controls {
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    margin-bottom:12px; font-family:var(--mono); font-size:.75rem;
+  }
+  .chart-controls label { color:#7a6a55; }
+  .chart-controls select, .chart-controls input {
+    font-family:var(--mono); font-size:.75rem;
+    background:var(--card); border:1px solid var(--line);
+    color:var(--ink); padding:4px 8px; cursor:pointer;
+  }
+  .ctrl-sep { color:var(--line); }
 
   /* ── 图表 ── */
-  .chart-wrap { background:var(--card); border:1px solid var(--line); padding:20px; margin-bottom:4px; }
+  .chart-wrap { background:var(--card); border:1px solid var(--line); padding:20px; }
 
   /* ── 表格 ── */
   .table-wrap { overflow-x:auto; background:var(--card); border:1px solid var(--line); }
@@ -72,29 +98,43 @@
   .zero { color:#9a8a72; }
   .empty td { color:#9a8a72; text-align:center; padding:20px; }
 
-  /* ── 基准线说明 ── */
-  .baseline-note {
-    font-family:var(--mono); font-size:.75rem; color:#7a6a55;
-    background:var(--card); border:1px solid var(--line);
-    border-left:3px solid var(--gold);
-    padding:10px 16px; margin-bottom:4px;
+  /* ── toggle 按钮 ── */
+  .toggle-btn {
+    font-family:var(--mono); font-size:.65rem;
+    background:var(--ink); color:var(--paper);
+    border:none; padding:3px 10px; cursor:pointer; letter-spacing:.08em;
   }
+
+  /* ── 注释小字 ── */
+  .note { font-family:var(--mono); font-size:.7rem; color:#9a8a72; margin-top:6px; }
 
   /* ── loading ── */
   #loading { display:flex; align-items:center; gap:12px; padding:60px 0; font-family:var(--mono); font-size:.84rem; color:#9a8a72; }
   .spinner { width:16px; height:16px; border:2px solid var(--line); border-top-color:var(--ink); border-radius:50%; animation:spin .8s linear infinite; }
   @keyframes spin { to { transform:rotate(360deg); } }
 
-  footer { margin-top:60px; padding:18px 40px; border-top:1px solid var(--line); font-size:.7rem; font-family:var(--mono); color:#b0a090; display:flex; gap:20px; flex-wrap:wrap; }
+  /* ── footer ── */
+  footer {
+    margin-top:60px; padding:20px 40px;
+    border-top:1px solid var(--line);
+    font-size:.7rem; font-family:var(--mono); color:#b0a090;
+    display:flex; flex-direction:column; gap:6px;
+  }
+  footer .footer-row { display:flex; gap:24px; flex-wrap:wrap; }
 </style>
 </head>
 <body>
 
 <header>
-  <div><h1>#<span>刃恒</span> Tag 监控</h1></div>
-  <div class="subtitle">
-    每小时整点抓取 · 数据来源 Lofter 官方<br>
-    历史数据永久保留 · 每日 00:00 CST 归档
+  <img src="renheng.png" alt="刃恒" class="header-img" onerror="this.style.display='none'">
+  <div class="header-title">
+    <h1>#<span class="ren">刃</span><span class="heng">恒</span> Tag 监控</h1>
+    <div class="header-desc">
+      Lofter 存在 Tag 参与数异常波动的问题——新帖发布后，官方统计的参与数有时不增反降，
+      疑似存在"吞 tag"现象。本页面通过每小时抓取官方参与数与用户实际发帖情况，
+      对比两者的长期趋势，帮助记录和追踪这一异常。<br>
+      <span style="color:#9a8a72">数据可能存在误差，仅供大致趋势参考。</span>
+    </div>
   </div>
   <div class="last-update" id="lastUpdate">—</div>
 </header>
@@ -103,19 +143,40 @@
   <div id="loading"><div class="spinner"></div>正在加载数据…</div>
   <div id="content" style="display:none">
 
-    <!-- ── 今日概览 ── -->
+    <!-- ── 今日概览卡片 ── -->
     <div class="section-title">今日概览</div>
     <div class="stat-row" id="statRow"></div>
 
-    <!-- ── 基准漏斗 ── -->
-    <div class="section-title" style="margin-top:32px">官方参与数变化漏斗（基准：2026-03-21 15:00）</div>
-    <div class="baseline-note" id="baselineNote">加载中…</div>
-    <div class="chart-wrap" style="height:260px">
-      <canvas id="chartBaseline"></canvas>
+    <!-- ── 官方参与数折线图 ── -->
+    <div class="section-title" style="margin-top:32px">官方参与数折线图</div>
+
+    <div class="chart-controls">
+      <label>视图模式</label>
+      <select id="viewMode" onchange="onViewModeChange()">
+        <option value="daily">按日期（每日末值）</option>
+        <option value="hourly" selected>按小时（指定日期）</option>
+      </select>
+
+      <span class="ctrl-sep">|</span>
+
+      <label>日期范围</label>
+      <input type="date" id="dateFrom" onchange="renderLineChart()">
+      <span>—</span>
+      <input type="date" id="dateTo" onchange="renderLineChart()">
+
+      <span class="ctrl-sep" id="hourlyDateLabel" style="display:none">|</span>
+      <label id="hourlyDayLabelText" style="display:none">查看日期</label>
+      <input type="date" id="hourlyDay" style="display:none" onchange="renderLineChart()">
     </div>
 
-    <!-- ── 每小时新帖 ── -->
-    <div class="section-title">过去 24 小时 — 每小时用户发帖数</div>
+    <div class="chart-wrap" style="height:280px">
+      <canvas id="chartLine"></canvas>
+    </div>
+    <div class="note">↑ 折线颜色变红表示该点官方参与数低于前一条记录（可能出现倒退）</div>
+
+    <!-- ── 每小时用户发帖柱状图 ── -->
+    <div class="section-title">过去 24 小时 — 每小时爬取新帖数</div>
+    <div class="note" style="margin-bottom:12px">注：此为我们爬取计算的用户实际发帖数，不等于 tag 参与数</div>
     <div class="chart-wrap" style="height:210px">
       <canvas id="chartHourly"></canvas>
     </div>
@@ -127,10 +188,10 @@
         <thead>
           <tr>
             <th>日期</th>
-            <th>用户发帖数</th>
+            <th>爬取发帖数</th>
             <th>官方参与（起）</th>
             <th>官方参与（末）</th>
-            <th>昨日官方增减</th>
+            <th>当日官方增减</th>
           </tr>
         </thead>
         <tbody id="dailyTable"></tbody>
@@ -154,15 +215,10 @@
       </table>
     </div>
 
-    <!-- ── 全部历史（折叠） ── -->
+    <!-- ── 全部历史 ── -->
     <div class="section-title">
       全部历史记录
-      <button onclick="toggleAll()" id="toggleBtn"
-        style="margin-left:12px;font-family:var(--mono);font-size:.65rem;
-               background:var(--ink);color:var(--paper);border:none;
-               padding:3px 10px;cursor:pointer;letter-spacing:.08em">
-        展开
-      </button>
+      <button class="toggle-btn" onclick="toggleAll()" id="toggleBtn">展开</button>
     </div>
     <div id="allHistory" style="display:none">
       <div class="table-wrap">
@@ -185,19 +241,28 @@
 </main>
 
 <footer>
-  <span>数据：data/records.json · 永久保留</span>
-  <span>API：TagBean.search DWR + HTML 解析</span>
-  <span>Tag：#刃恒 · 基准 65786 @ 2026-03-21 15:00</span>
+  <div class="footer-row">
+    <span>每小时整点抓取 · 数据来源：Lofter 官方</span>
+    <span>每日 00:00 CST 归档</span>
+    <span>API：TagBean.search DWR + HTML 解析</span>
+  </div>
+  <div style="color:#ccc0b0">数据可能存在误差，仅供大致趋势参考。</div>
 </footer>
 
 <script>
 const BASELINE = 65786;
-const INK  = '#1a1008';
-const RED  = '#c0392b';
-const GOLD = '#b8860b';
-const LINE = '#d4c5a9';
-const GREEN= '#2e7d32';
+const BASELINE_TIME = '2026-03-21 15:00';
+const INK   = '#1a1008';
+const RED   = '#c0392b';
+const GOLD  = '#b8860b';
+const LINE  = '#d4c5a9';
+const GREEN = '#2e7d32';
 
+let allHourly = [];
+let allDaily  = [];
+let lineChartInstance = null;
+
+// ── 格式工具 ───────────────────────────────────────────────
 function fmt(n) {
   if (n === null || n === undefined) return '—';
   return Number(n).toLocaleString('zh-CN');
@@ -210,19 +275,126 @@ function diffCls(n) {
   if (n === null || n === undefined) return 'zero';
   return n < 0 ? 'neg' : n > 0 ? 'pos' : 'zero';
 }
-
 function toggleAll() {
   const el  = document.getElementById('allHistory');
   const btn = document.getElementById('toggleBtn');
-  if (el.style.display === 'none') {
-    el.style.display = 'block';
-    btn.textContent  = '收起';
-  } else {
-    el.style.display = 'none';
-    btn.textContent  = '展开';
-  }
+  const show = el.style.display === 'none';
+  el.style.display = show ? 'block' : 'none';
+  btn.textContent  = show ? '收起' : '展开';
 }
 
+// ── 视图模式切换 ────────────────────────────────────────────
+function onViewModeChange() {
+  const mode = document.getElementById('viewMode').value;
+  const isHourly = mode === 'hourly';
+
+  // 显示/隐藏"查看日期"控件
+  document.getElementById('hourlyDateLabel').style.display   = isHourly ? '' : 'none';
+  document.getElementById('hourlyDayLabelText').style.display = isHourly ? '' : 'none';
+  document.getElementById('hourlyDay').style.display         = isHourly ? '' : 'none';
+  // 日期范围在 daily 模式下显示，hourly 模式下隐藏
+  document.getElementById('dateFrom').style.display = isHourly ? 'none' : '';
+  document.getElementById('dateTo').style.display   = isHourly ? 'none' : '';
+  document.querySelector('[for-from]') // handled below
+
+  renderLineChart();
+}
+
+// ── 折线图渲染 ──────────────────────────────────────────────
+function renderLineChart() {
+  const mode = document.getElementById('viewMode').value;
+
+  let labels = [], dataPoints = [], baseline = BASELINE;
+
+  if (mode === 'daily') {
+    // 每日末值：从 daily 归档取，加上今日实时
+    const from = document.getElementById('dateFrom').value;
+    const to   = document.getElementById('dateTo').value;
+
+    let rows = allDaily.map(d => ({
+      label: d.date,
+      value: d.official_end,
+    }));
+    // 加今日最新一条 hourly
+    const todayStr = allHourly.length ? allHourly[allHourly.length - 1].date : '';
+    const todayCounts = allHourly.filter(r => r.date === todayStr && r.official_count != null);
+    if (todayCounts.length) {
+      rows.push({ label: todayStr + ' (今日)', value: todayCounts[todayCounts.length - 1].official_count });
+    }
+
+    if (from) rows = rows.filter(r => r.label >= from);
+    if (to)   rows = rows.filter(r => r.label <= to + 'z'); // 字符串比较
+    labels     = rows.map(r => r.label);
+    dataPoints = rows.map(r => r.value);
+    // 基准线用第一个数据点
+    baseline = rows.length ? (rows[0].value || BASELINE) : BASELINE;
+
+  } else {
+    // 按小时：取指定日期的全部 hourly
+    const day = document.getElementById('hourlyDay').value;
+    if (!day) {
+      // 默认取最新一天
+      const dates = [...new Set(allHourly.map(r => r.date))].sort();
+      document.getElementById('hourlyDay').value = dates[dates.length - 1] || '';
+    }
+    const selDay = document.getElementById('hourlyDay').value;
+    const rows   = allHourly.filter(r => r.date === selDay);
+    labels     = rows.map(r => r.time.slice(11, 16)); // "HH:MM"
+    dataPoints = rows.map(r => r.official_count);
+    baseline   = dataPoints.find(v => v != null) || BASELINE;
+  }
+
+  // 点颜色：比前一点低则红
+  const pointColors = dataPoints.map((v, i) => {
+    if (i === 0 || v == null) return INK;
+    const prev = dataPoints[i - 1];
+    return (prev != null && v < prev) ? RED : INK;
+  });
+
+  if (lineChartInstance) lineChartInstance.destroy();
+
+  lineChartInstance = new Chart(document.getElementById('chartLine'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: '官方参与数',
+          data: dataPoints,
+          borderColor: INK,
+          backgroundColor: 'rgba(26,16,8,.06)',
+          borderWidth: 2,
+          pointRadius: 4,
+          pointBackgroundColor: pointColors,
+          pointBorderColor: pointColors,
+          fill: true, tension: 0.3,
+        },
+        {
+          label: '基准线（首点）',
+          data: Array(labels.length).fill(baseline),
+          borderColor: GOLD,
+          borderWidth: 1.5,
+          borderDash: [5, 4],
+          pointRadius: 0,
+          fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { font: { family:"'JetBrains Mono'" }, boxWidth: 18 } },
+        tooltip: { callbacks: { label: ctx => ' ' + fmt(ctx.parsed.y) } }
+      },
+      scales: {
+        x: { ticks:{ font:{family:"'JetBrains Mono'"}, maxRotation:45 }, grid:{color:LINE} },
+        y: { ticks:{ font:{family:"'JetBrains Mono'"} }, grid:{color:LINE} },
+      }
+    }
+  });
+}
+
+// ── 主函数 ─────────────────────────────────────────────────
 async function main() {
   let records;
   try {
@@ -236,27 +408,36 @@ async function main() {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('content').style.display = 'block';
 
-  const hourly = records.hourly || [];
-  const daily  = records.daily  || [];
-  const today  = records.today  || {};
+  allHourly = records.hourly || [];
+  allDaily  = records.daily  || [];
+  const today    = records.today  || {};
   const baseline = (records.baseline || {}).count || BASELINE;
-  const baselineTime = (records.baseline || {}).time || '2026-03-21 15:00';
 
-  if (hourly.length) {
-    const last = hourly[hourly.length - 1];
+  // 最后更新
+  if (allHourly.length) {
+    const last = allHourly[allHourly.length - 1];
     document.getElementById('lastUpdate').innerHTML =
       '最后更新：' + last.time + ' CST<br>官方参与：' + fmt(last.official_count);
   }
 
-  // ── 统计卡片（3张，隐藏差异） ──────────────────────────────
-  const last = hourly[hourly.length - 1] || {};
+  // ── 初始化日期选择器 ─────────────────────────────────────
+  const dates = [...new Set(allHourly.map(r => r.date))].sort();
+  const minDate = dates[0] || '2026-03-21';
+  const maxDate = dates[dates.length - 1] || new Date().toISOString().slice(0, 10);
+  document.getElementById('dateFrom').value = '2026-03-21';
+  document.getElementById('dateTo').value   = maxDate;
+  document.getElementById('hourlyDay').value = maxDate;
+  // dateFrom/dateTo 在 hourly 模式下隐藏
+  document.getElementById('dateFrom').style.display = 'none';
+  document.getElementById('dateTo').style.display   = 'none';
+
+  // ── 统计卡片 ─────────────────────────────────────────────
+  const last        = allHourly[allHourly.length - 1] || {};
   const latestCount = last.official_count;
   const baselineDelta = latestCount != null ? latestCount - baseline : null;
-
-  // 昨日官方增长（从 daily 取最后一条）
-  const lastDaily = daily.length ? daily[daily.length - 1] : null;
-  const yestGrowth = lastDaily ? lastDaily.official_growth : null;
-  const yestDate   = lastDaily ? lastDaily.date : null;
+  const lastDaily   = allDaily.length ? allDaily[allDaily.length - 1] : null;
+  const yestGrowth  = lastDaily ? lastDaily.official_growth : null;
+  const yestDate    = lastDaily ? lastDaily.date : null;
 
   const cards = [
     {
@@ -274,13 +455,13 @@ async function main() {
     {
       label: '距基准增减',
       value: baselineDelta != null ? diffStr(baselineDelta) : '—',
-      sub:   '基准 ' + fmt(baseline) + ' @ ' + baselineTime,
+      sub:   '基准 ' + fmt(baseline) + ' @ ' + BASELINE_TIME,
       cls:   baselineDelta == null ? '' : baselineDelta < 0 ? 'red' : 'green',
       warn:  baselineDelta != null && baselineDelta < 0,
     },
     {
       label: yestDate ? '昨日官方增减（' + yestDate + '）' : '昨日官方增减',
-      value: yestGrowth != null ? diffStr(yestGrowth) : '数据积累中',
+      value: yestGrowth != null ? diffStr(yestGrowth) : '积累中…',
       sub:   yestGrowth != null
              ? fmt(lastDaily.official_start) + ' → ' + fmt(lastDaily.official_end)
              : '需要至少两天数据',
@@ -301,91 +482,35 @@ async function main() {
     row.appendChild(d);
   });
 
-  // ── 基准漏斗说明 ────────────────────────────────────────────
-  document.getElementById('baselineNote').textContent =
-    `基准点：${baselineTime} CST，官方参与数 ${fmt(baseline)}。` +
-    (baselineDelta != null
-      ? `  当前相差 ${diffStr(baselineDelta)}（${baselineDelta >= 0 ? '增长' : '倒退'}）。`
-      : '');
+  // ── 折线图（默认按小时） ──────────────────────────────────
+  renderLineChart();
 
-  // ── 图表1：官方参与数 vs 基准线（全部历史或最近72h） ────────
-  // 取最近 72 条（72h）
-  const recent72 = hourly.slice(-72);
-  const labelsF  = recent72.map(r => r.time.slice(5));
-  const countF   = recent72.map(r => r.official_count);
-
-  new Chart(document.getElementById('chartBaseline'), {
-    type: 'line',
-    data: {
-      labels: labelsF,
-      datasets: [
-        {
-          label: '官方参与数',
-          data: countF,
-          borderColor: INK,
-          backgroundColor: 'rgba(26,16,8,.06)',
-          borderWidth: 2,
-          pointRadius: 2,
-          pointBackgroundColor: countF.map((v,i) => {
-            if (i === 0) return INK;
-            const p = countF[i-1];
-            return (p != null && v != null && v < p) ? RED : INK;
-          }),
-          fill: true, tension: 0.3,
-          yAxisID: 'y',
-        },
-        {
-          label: '基准线',
-          data: Array(labelsF.length).fill(baseline),
-          borderColor: GOLD,
-          borderWidth: 1.5,
-          borderDash: [5, 4],
-          pointRadius: 0,
-          fill: false,
-          yAxisID: 'y',
-        }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { labels: { font: { family:"'JetBrains Mono'" }, boxWidth: 20 } },
-        tooltip: { callbacks: { label: ctx => ' ' + fmt(ctx.parsed.y) } }
-      },
-      scales: {
-        x: { ticks: { font:{family:"'JetBrains Mono'"}, maxRotation:45 }, grid:{color:LINE} },
-        y: { ticks: { font:{family:"'JetBrains Mono'"} }, grid:{color:LINE} },
-      }
-    }
-  });
-
-  // ── 图表2：每小时用户发帖（24h） ─────────────────────────────
-  const last24  = hourly.slice(-24);
+  // ── 柱状图：近 24h 发帖 ───────────────────────────────────
+  const last24  = allHourly.slice(-24);
   const labels2 = last24.map(r => r.time.slice(5));
   const np24    = last24.map(r => r.new_posts_count || 0);
-
   new Chart(document.getElementById('chartHourly'), {
     type: 'bar',
     data: {
       labels: labels2,
-      datasets: [{ data: np24, backgroundColor: np24.map(v => v===0 ? LINE : INK), borderWidth:0 }]
+      datasets: [{ data:np24, backgroundColor:np24.map(v=>v===0?LINE:INK), borderWidth:0 }]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend:{display:false} },
-      scales: {
-        x: { ticks:{font:{family:"'JetBrains Mono'"},maxRotation:45}, grid:{display:false} },
-        y: { ticks:{font:{family:"'JetBrains Mono'"}}, grid:{color:LINE} },
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false} },
+      scales:{
+        x:{ ticks:{font:{family:"'JetBrains Mono'"},maxRotation:45}, grid:{display:false} },
+        y:{ ticks:{font:{family:"'JetBrains Mono'"}}, grid:{color:LINE} },
       }
     }
   });
 
-  // ── 每日归档表 ───────────────────────────────────────────────
+  // ── 每日归档表 ────────────────────────────────────────────
   const dtbody = document.getElementById('dailyTable');
-  if (!daily.length) {
-    dtbody.innerHTML = '<tr class="empty"><td colspan="5">暂无每日归档（至少需要运行满一天）</td></tr>';
+  if (!allDaily.length) {
+    dtbody.innerHTML = '<tr class="empty"><td colspan="5">暂无每日归档（运行满一天后自动生成）</td></tr>';
   } else {
-    [...daily].reverse().forEach(d => {
+    [...allDaily].reverse().forEach(d => {
       const g = d.official_growth;
       const tr = document.createElement('tr');
       tr.innerHTML = `
@@ -399,8 +524,8 @@ async function main() {
     });
   }
 
-  // ── 近 48h 逐条表 ────────────────────────────────────────────
-  function buildHourlyRows(rows, tbodyId) {
+  // ── 逐条表辅助函数 ───────────────────────────────────────
+  function buildRows(rows, tbodyId) {
     const tbody = document.getElementById(tbodyId);
     const arr   = [...rows].reverse();
     arr.forEach((r, i) => {
@@ -421,8 +546,8 @@ async function main() {
     });
   }
 
-  buildHourlyRows(hourly.slice(-48), 'hourlyTable');
-  buildHourlyRows(hourly, 'allTable');   // 全部历史
+  buildRows(allHourly.slice(-48), 'hourlyTable');
+  buildRows(allHourly, 'allTable');
 }
 
 main();
