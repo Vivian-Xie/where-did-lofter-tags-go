@@ -1,0 +1,40 @@
+name: Lofter Tag Monitor
+
+on:
+  schedule:
+    # 每小时整点运行（UTC时间，北京时间=UTC+8）
+    - cron: "0 * * * *"
+  workflow_dispatch:   # 允许手动触发，方便测试
+
+permissions:
+  contents: write      # 允许 workflow 把数据 commit 回 repo
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run scraper
+        env:
+          LOFTER_AUTH: ${{ secrets.LOFTER_AUTH }}
+        run: python scraper.py
+
+      - name: Commit and push data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/records.json
+          # 如果没有变化就不 commit（避免空提交报错）
+          git diff --staged --quiet || git commit -m "chore: update records $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push

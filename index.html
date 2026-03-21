@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>刃恒 Tag 监控面板</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --ink:     #1a1008;
+    --paper:   #f5efe6;
+    --red:     #c0392b;
+    --red-dim: #8b1a12;
+    --gold:    #b8860b;
+    --line:    #d4c5a9;
+    --card:    #fffdf8;
+    --mono:    'JetBrains Mono', monospace;
+    --serif:   'Noto Serif SC', serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── 顶部标题 ── */
+  header {
+    border-bottom: 3px double var(--ink);
+    padding: 32px 40px 24px;
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 900;
+    letter-spacing: .05em;
+    line-height: 1;
+  }
+  header h1 span { color: var(--red); }
+  .subtitle {
+    font-size: .85rem;
+    color: #7a6a55;
+    font-family: var(--mono);
+    border-left: 2px solid var(--line);
+    padding-left: 14px;
+    line-height: 1.6;
+  }
+  .last-update {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: .75rem;
+    color: #9a8a72;
+    text-align: right;
+  }
+
+  /* ── 主体容器 ── */
+  main { padding: 32px 40px; max-width: 1200px; }
+
+  /* ── 卡片区 ── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--ink);
+    padding: 20px 24px 16px;
+    position: relative;
+  }
+  .stat-card.alert { border-top-color: var(--red); }
+  .stat-card .label {
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #7a6a55;
+    font-family: var(--mono);
+    margin-bottom: 8px;
+  }
+  .stat-card .value {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 900;
+    font-family: var(--mono);
+    line-height: 1;
+  }
+  .stat-card .value.red  { color: var(--red); }
+  .stat-card .value.gold { color: var(--gold); }
+  .stat-card .sub {
+    font-size: .75rem;
+    color: #9a8a72;
+    margin-top: 6px;
+    font-family: var(--mono);
+  }
+  .badge {
+    position: absolute;
+    top: 12px; right: 14px;
+    font-size: .65rem;
+    font-family: var(--mono);
+    background: var(--red);
+    color: #fff;
+    padding: 2px 7px;
+    letter-spacing: .08em;
+  }
+
+  /* ── 分隔标题 ── */
+  .section-title {
+    font-size: .72rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    font-family: var(--mono);
+    color: #7a6a55;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    margin-top: 40px;
+  }
+
+  /* ── 图表 ── */
+  .chart-wrap {
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+  .chart-wrap canvas { width: 100% !important; }
+
+  /* ── 表格 ── */
+  .table-wrap {
+    overflow-x: auto;
+    background: var(--card);
+    border: 1px solid var(--line);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: .8rem;
+  }
+  th {
+    background: var(--ink);
+    color: var(--paper);
+    text-align: left;
+    padding: 10px 16px;
+    letter-spacing: .1em;
+    font-weight: 400;
+  }
+  td { padding: 9px 16px; border-bottom: 1px solid var(--line); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f0e8d8; }
+  .neg { color: var(--red); font-weight: 700; }
+  .pos { color: #2e7d32; font-weight: 700; }
+  .zero { color: #9a8a72; }
+
+  /* ── 警告横幅 ── */
+  .alert-banner {
+    background: #fff0ee;
+    border: 1px solid var(--red);
+    border-left: 4px solid var(--red);
+    padding: 12px 20px;
+    margin-bottom: 24px;
+    font-size: .85rem;
+    display: none;
+  }
+  .alert-banner b { color: var(--red); }
+
+  /* ── 加载态 ── */
+  #loading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 60px 0;
+    font-family: var(--mono);
+    font-size: .85rem;
+    color: #9a8a72;
+  }
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid var(--line);
+    border-top-color: var(--ink);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── 注脚 ── */
+  footer {
+    margin-top: 60px;
+    padding: 20px 40px;
+    border-top: 1px solid var(--line);
+    font-size: .72rem;
+    font-family: var(--mono);
+    color: #b0a090;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>#<span>刃恒</span> Tag 监控</h1>
+  </div>
+  <div class="subtitle">
+    每小时抓取一次 · 数据来源：Lofter 官方<br>
+    每日北京时间 00:00 结算
+  </div>
+  <div class="last-update" id="lastUpdate">—</div>
+</header>
+
+<main>
+  <div id="loading"><div class="spinner"></div>正在加载数据…</div>
+  <div id="content" style="display:none">
+
+    <!-- 警告横幅 -->
+    <div class="alert-banner" id="alertBanner">
+      ⚠ <b>检测到 Tag 数量异常下降！</b>今日官方增长与实际发帖数差异超过 100，可能存在数量倒退。
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="stat-row" id="statRow"></div>
+
+    <!-- 24h 折线图：官方参与数变化 -->
+    <div class="section-title">过去 24 小时 — 官方参与数变化</div>
+    <div class="chart-wrap" style="height:260px">
+      <canvas id="chartOfficial"></canvas>
+    </div>
+
+    <!-- 每小时新增帖子图 -->
+    <div class="section-title">过去 24 小时 — 每小时新帖数量</div>
+    <div class="chart-wrap" style="height:220px">
+      <canvas id="chartHourly"></canvas>
+    </div>
+
+    <!-- 每日汇总表 -->
+    <div class="section-title">每日汇总记录</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th>爬取新帖数</th>
+            <th>官方增长</th>
+            <th>差异（官方−爬取）</th>
+            <th>起始参与数</th>
+            <th>结束参与数</th>
+          </tr>
+        </thead>
+        <tbody id="dailyTable"></tbody>
+      </table>
+    </div>
+
+    <!-- 最近 48h 详细记录表 -->
+    <div class="section-title">最近 48 小时 — 逐条记录</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>时间（CST）</th>
+            <th>官方参与数</th>
+            <th>本小时新帖</th>
+          </tr>
+        </thead>
+        <tbody id="hourlyTable"></tbody>
+      </table>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<footer>
+  <span>数据存储：GitHub repo · data/records.json</span>
+  <span>爬取逻辑：TagBean.search DWR API + HTML解析</span>
+  <span>监控 tag：#刃恒</span>
+</footer>
+
+<script>
+// ── 颜色常量 ──────────────────────────────────────────────────
+const INK   = '#1a1008';
+const RED   = '#c0392b';
+const GOLD  = '#b8860b';
+const LINE  = '#d4c5a9';
+const GREEN = '#2e7d32';
+
+// ── 工具函数 ──────────────────────────────────────────────────
+function fmt(n) {
+  if (n === null || n === undefined) return '—';
+  return n.toLocaleString('zh-CN');
+}
+function diffClass(n) {
+  if (n === null || n === undefined) return 'zero';
+  if (n < 0) return 'neg';
+  if (n > 0) return 'pos';
+  return 'zero';
+}
+function diffStr(n) {
+  if (n === null || n === undefined) return '—';
+  if (n > 0) return '+' + fmt(n);
+  return fmt(n);
+}
+
+// ── 主逻辑 ───────────────────────────────────────────────────
+async function main() {
+  let records;
+  try {
+    const resp = await fetch('data/records.json?t=' + Date.now());
+    records = await resp.json();
+  } catch(e) {
+    document.getElementById('loading').textContent = '数据加载失败，请稍后刷新。';
+    return;
+  }
+
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+
+  const hourly = records.hourly || [];
+  const daily  = records.daily  || [];
+
+  // ── 最后更新时间 ──────────────────────────────────────────
+  if (hourly.length) {
+    document.getElementById('lastUpdate').textContent =
+      '最后更新：' + hourly[hourly.length - 1].time + ' CST';
+  }
+
+  // ── 最近 24h 数据 ─────────────────────────────────────────
+  const last24 = hourly.slice(-24);
+  const latest = last24[last24.length - 1] || {};
+
+  // 今日截止现在的新帖总数
+  const today  = latest.date || '';
+  const todayH = hourly.filter(r => r.date === today);
+  const todayNew = todayH.reduce((s, r) => s + (r.new_posts_count || 0), 0);
+
+  // 官方今日增长
+  const todayCounts = todayH.filter(r => r.official_count !== null).map(r => r.official_count);
+  const officialGrowth = todayCounts.length >= 2
+    ? todayCounts[todayCounts.length - 1] - todayCounts[0]
+    : null;
+
+  // ── 警告横幅 ──────────────────────────────────────────────
+  if (daily.length) {
+    const lastDay = daily[daily.length - 1];
+    if (lastDay.discrepancy !== null && lastDay.discrepancy < -100) {
+      document.getElementById('alertBanner').style.display = 'block';
+    }
+  }
+
+  // ── 统计卡片 ──────────────────────────────────────────────
+  const statRow = document.getElementById('statRow');
+  const cards = [
+    {
+      label: '当前官方参与数',
+      value: fmt(latest.official_count),
+      sub:   latest.time ? '截至 ' + latest.time : '',
+      cls:   '',
+    },
+    {
+      label: '今日爬取新帖数',
+      value: fmt(todayNew),
+      sub:   today + ' 累计',
+      cls:   '',
+    },
+    {
+      label: '今日官方增长',
+      value: officialGrowth !== null ? diffStr(officialGrowth) : '—',
+      sub:   '官方参与数变化',
+      cls:   officialGrowth < 0 ? 'red' : '',
+    },
+    {
+      label: '今日差异',
+      value: officialGrowth !== null ? diffStr(officialGrowth - todayNew) : '—',
+      sub:   '官方增长 − 爬取新帖',
+      cls:   (officialGrowth - todayNew) < -50 ? 'red' : 'gold',
+      badge: (officialGrowth !== null && (officialGrowth - todayNew) < -100) ? '异常' : '',
+    },
+  ];
+
+  cards.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'stat-card' + (c.badge ? ' alert' : '');
+    div.innerHTML = `
+      <div class="label">${c.label}</div>
+      <div class="value ${c.cls}">${c.value}</div>
+      <div class="sub">${c.sub}</div>
+      ${c.badge ? `<span class="badge">${c.badge}</span>` : ''}
+    `;
+    statRow.appendChild(div);
+  });
+
+  // ── 图表：官方参与数 ──────────────────────────────────────
+  const labels24    = last24.map(r => r.time.slice(5)); // "MM-DD HH:MM"
+  const official24  = last24.map(r => r.official_count);
+
+  new Chart(document.getElementById('chartOfficial'), {
+    type: 'line',
+    data: {
+      labels: labels24,
+      datasets: [{
+        label: '官方参与数',
+        data: official24,
+        borderColor: INK,
+        backgroundColor: 'rgba(26,16,8,.06)',
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: INK,
+        fill: true,
+        tension: 0.3,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { font: { family: "'JetBrains Mono'" }, maxRotation: 45 }, grid: { color: LINE } },
+        y: { ticks: { font: { family: "'JetBrains Mono'" } }, grid: { color: LINE } },
+      }
+    }
+  });
+
+  // ── 图表：每小时新帖 ──────────────────────────────────────
+  const newPosts24 = last24.map(r => r.new_posts_count || 0);
+
+  new Chart(document.getElementById('chartHourly'), {
+    type: 'bar',
+    data: {
+      labels: labels24,
+      datasets: [{
+        label: '新帖数',
+        data: newPosts24,
+        backgroundColor: newPosts24.map(v => v === 0 ? LINE : INK),
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { font: { family: "'JetBrains Mono'" }, maxRotation: 45 }, grid: { display: false } },
+        y: { ticks: { font: { family: "'JetBrains Mono'" } }, grid: { color: LINE } },
+      }
+    }
+  });
+
+  // ── 每日汇总表 ────────────────────────────────────────────
+  const tbody = document.getElementById('dailyTable');
+  if (!daily.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="color:#9a8a72;text-align:center;padding:20px">暂无每日结算数据（数据积累中…）</td></tr>';
+  } else {
+    [...daily].reverse().forEach(d => {
+      const disc = d.discrepancy;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${d.date}</td>
+        <td>${fmt(d.total_new_posts)}</td>
+        <td class="${diffClass(d.official_growth)}">${diffStr(d.official_growth)}</td>
+        <td class="${diffClass(disc)}">${diffStr(disc)}</td>
+        <td>${fmt(d.official_start)}</td>
+        <td>${fmt(d.official_end)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ── 最近 48h 逐条表 ───────────────────────────────────────
+  const recent48 = hourly.slice(-48);
+  const hbody = document.getElementById('hourlyTable');
+  [...recent48].reverse().forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${r.time}</td>
+      <td>${fmt(r.official_count)}</td>
+      <td>${r.new_posts_count || 0}</td>
+    `;
+    hbody.appendChild(tr);
+  });
+}
+
+main();
+</script>
+</body>
+</html>
