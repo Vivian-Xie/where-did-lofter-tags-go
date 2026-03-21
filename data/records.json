@@ -1,1 +1,23 @@
-{"baseline":{"count":65786,"time":"2026-03-21 15:00"},"hourly":[],"daily":[],"today":{}}
+{
+  "baseline": {
+    "count": 65786,
+    "time": "2026-03-21 15:00"
+  },
+  "hourly": [
+    {
+      "time": "2026-03-21 15:49",
+      "date": "2026-03-21",
+      "official_count": 65786,
+      "baseline_delta": 0,
+      "new_posts_count": 2,
+      "latest_post_ts": 1774077903157
+    }
+  ],
+  "daily": [],
+  "today": {
+    "date": "2026-03-21",
+    "total_new_posts": 2,
+    "official_latest": 65786,
+    "hours_recorded": 1
+  }
+}
