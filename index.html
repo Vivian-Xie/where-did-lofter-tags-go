@@ -59,8 +59,8 @@
     line-height: 1;
     color: #fff;
   }
-  header h1 .ren  { color: #ffd580; }
-  header h1 .heng { color: #a8e6cf; }
+  header h1 .ren  { color: #ff2222; }
+  header h1 .heng { color: #257b77; }
   .header-desc {
     font-size: .8rem;
     color: rgba(255,255,255,.85);
@@ -330,7 +330,6 @@
             <th>时间（CST）</th>
             <th>官方参与数</th>
             <th>较上条变化</th>
-            <th>距基准变化</th>
             <th>本小时发帖</th>
           </tr>
         </thead>
@@ -338,27 +337,7 @@
       </table>
     </div>
 
-    <!-- ── 全部历史 ── -->
-    <div class="section-title">
-      全部历史记录
-      <button class="toggle-btn" onclick="toggleAll()" id="toggleBtn">展开</button>
-    </div>
-    <div id="allHistory" style="display:none">
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>时间（CST）</th>
-              <th>官方参与数</th>
-              <th>较上条变化</th>
-              <th>距基准变化</th>
-              <th>本小时发帖</th>
-            </tr>
-          </thead>
-          <tbody id="allTable"></tbody>
-        </table>
-      </div>
-    </div>
+
 
   </div>
 </main>
@@ -399,13 +378,6 @@ function diffStr(n) {
 function diffCls(n) {
   if (n === null || n === undefined) return 'zero';
   return n < 0 ? 'neg' : n > 0 ? 'pos' : 'zero';
-}
-function toggleAll() {
-  const el  = document.getElementById('allHistory');
-  const btn = document.getElementById('toggleBtn');
-  const show = el.style.display === 'none';
-  el.style.display = show ? 'block' : 'none';
-  btn.textContent  = show ? '收起' : '展开';
 }
 
 function onViewModeChange() {
@@ -570,13 +542,6 @@ async function main() {
       cls: '', cardCls: '',
     },
     {
-      label: '距基准增减',
-      value: bdelta != null ? diffStr(bdelta) : '—',
-      sub:   '基准 ' + fmt(baseline) + ' @ ' + BASELINE_TIME,
-      cls:   bdelta == null ? '' : bdelta < 0 ? 'red' : 'green',
-      cardCls: bdelta != null && bdelta < 0 ? 'warn' : bdelta > 0 ? 'good' : '',
-    },
-    {
       label: yestDate ? '昨日官方增减（' + yestDate + '）' : '昨日官方增减',
       value: yestGrowth != null ? diffStr(yestGrowth) : '积累中…',
       sub:   yestGrowth != null
@@ -654,14 +619,11 @@ async function main() {
       const prev  = arr[i + 1];
       const delta = (r.official_count != null && prev && prev.official_count != null)
                     ? r.official_count - prev.official_count : null;
-      const bd    = r.baseline_delta != null ? r.baseline_delta
-                    : (r.official_count != null ? r.official_count - baseline : null);
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${r.time}</td>
         <td>${fmt(r.official_count)}</td>
         <td class="${diffCls(delta)}">${diffStr(delta)}</td>
-        <td class="${diffCls(bd)}">${diffStr(bd)}</td>
         <td>${r.new_posts_count || 0}</td>
       `;
       tbody.appendChild(tr);
@@ -669,7 +631,6 @@ async function main() {
   }
 
   buildRows(allHourly.slice(-48), 'hourlyTable');
-  buildRows(allHourly, 'allTable');
 }
 
 main();
