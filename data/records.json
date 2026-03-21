@@ -1,1 +1,21 @@
-{"hourly": [], "daily": [], "today": {}}
+{
+  "hourly": [
+    {
+      "time": "2026-03-21 15:14",
+      "date": "2026-03-21",
+      "official_count": 65786,
+      "new_posts_count": 20,
+      "earliest_post_ts": 1774027128267
+    }
+  ],
+  "daily": [],
+  "today": {
+    "date": "2026-03-21",
+    "total_new_posts": 20,
+    "official_start": 65786,
+    "official_latest": 65786,
+    "official_growth": 0,
+    "discrepancy": -20,
+    "hours_recorded": 1
+  }
+}
