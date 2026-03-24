@@ -19,13 +19,507 @@
       "baseline_delta": 1,
       "new_posts_count": 1,
       "latest_post_ts": 1774080771079
+    },
+    {
+      "time": "2026-03-21 17:23",
+      "date": "2026-03-21",
+      "official_count": 65789,
+      "baseline_delta": 3,
+      "new_posts_count": 3,
+      "latest_post_ts": 1774085014222
+    },
+    {
+      "time": "2026-03-21 18:17",
+      "date": "2026-03-21",
+      "official_count": 65784,
+      "baseline_delta": -2,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774085014222
+    },
+    {
+      "time": "2026-03-21 19:16",
+      "date": "2026-03-21",
+      "official_count": 65789,
+      "baseline_delta": 3,
+      "new_posts_count": 5,
+      "latest_post_ts": 1774091759403
+    },
+    {
+      "time": "2026-03-21 20:29",
+      "date": "2026-03-21",
+      "official_count": 65792,
+      "baseline_delta": 6,
+      "new_posts_count": 6,
+      "latest_post_ts": 1774093561320
+    },
+    {
+      "time": "2026-03-21 21:36",
+      "date": "2026-03-21",
+      "official_count": 65798,
+      "baseline_delta": 12,
+      "new_posts_count": 8,
+      "latest_post_ts": 1774099952383
+    },
+    {
+      "time": "2026-03-21 22:18",
+      "date": "2026-03-21",
+      "official_count": 65802,
+      "baseline_delta": 16,
+      "new_posts_count": 4,
+      "latest_post_ts": 1774102646313
+    },
+    {
+      "time": "2026-03-21 23:17",
+      "date": "2026-03-21",
+      "official_count": 65804,
+      "baseline_delta": 18,
+      "new_posts_count": 4,
+      "latest_post_ts": 1774104659167
+    },
+    {
+      "time": "2026-03-22 00:18",
+      "date": "2026-03-22",
+      "official_count": 65798,
+      "baseline_delta": 12,
+      "new_posts_count": 1,
+      "latest_post_ts": 1774106804917
+    },
+    {
+      "time": "2026-03-22 01:18",
+      "date": "2026-03-22",
+      "official_count": 65799,
+      "baseline_delta": 13,
+      "new_posts_count": 1,
+      "latest_post_ts": 1774112282331
+    },
+    {
+      "time": "2026-03-22 02:23",
+      "date": "2026-03-22",
+      "official_count": 65798,
+      "baseline_delta": 12,
+      "new_posts_count": 1,
+      "latest_post_ts": 1774113617955
+    },
+    {
+      "time": "2026-03-22 03:17",
+      "date": "2026-03-22",
+      "official_count": 65800,
+      "baseline_delta": 14,
+      "new_posts_count": 3,
+      "latest_post_ts": 1774119260621
+    },
+    {
+      "time": "2026-03-22 04:16",
+      "date": "2026-03-22",
+      "official_count": 65800,
+      "baseline_delta": 14,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774119260621
+    },
+    {
+      "time": "2026-03-22 05:16",
+      "date": "2026-03-22",
+      "official_count": 65800,
+      "baseline_delta": 14,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774119260621
+    },
+    {
+      "time": "2026-03-22 06:15",
+      "date": "2026-03-22",
+      "official_count": 65800,
+      "baseline_delta": 14,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774119260621
+    },
+    {
+      "time": "2026-03-22 07:16",
+      "date": "2026-03-22",
+      "official_count": 65800,
+      "baseline_delta": 14,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774119260621
+    },
+    {
+      "time": "2026-03-22 09:20",
+      "date": "2026-03-22",
+      "official_count": 65803,
+      "baseline_delta": 17,
+      "new_posts_count": 3,
+      "latest_post_ts": 1774136902922
+    },
+    {
+      "time": "2026-03-22 12:11",
+      "date": "2026-03-22",
+      "official_count": 65807,
+      "baseline_delta": 21,
+      "new_posts_count": 9,
+      "latest_post_ts": 1774152640369
+    },
+    {
+      "time": "2026-03-22 13:46",
+      "date": "2026-03-22",
+      "official_count": 65824,
+      "baseline_delta": 38,
+      "new_posts_count": 17,
+      "latest_post_ts": 1774158322065
+    },
+    {
+      "time": "2026-03-22 14:39",
+      "date": "2026-03-22",
+      "official_count": 65828,
+      "baseline_delta": 42,
+      "new_posts_count": 6,
+      "latest_post_ts": 1774161244857
+    },
+    {
+      "time": "2026-03-22 15:33",
+      "date": "2026-03-22",
+      "official_count": 65823,
+      "baseline_delta": 37,
+      "new_posts_count": 3,
+      "latest_post_ts": 1774163842424
+    },
+    {
+      "time": "2026-03-22 16:23",
+      "date": "2026-03-22",
+      "official_count": 65831,
+      "baseline_delta": 45,
+      "new_posts_count": 8,
+      "latest_post_ts": 1774167632930
+    },
+    {
+      "time": "2026-03-22 17:24",
+      "date": "2026-03-22",
+      "official_count": 65833,
+      "baseline_delta": 47,
+      "new_posts_count": 4,
+      "latest_post_ts": 1774171295987
+    },
+    {
+      "time": "2026-03-22 18:18",
+      "date": "2026-03-22",
+      "official_count": 65835,
+      "baseline_delta": 49,
+      "new_posts_count": 2,
+      "latest_post_ts": 1774173310910
+    },
+    {
+      "time": "2026-03-22 19:17",
+      "date": "2026-03-22",
+      "official_count": 65838,
+      "baseline_delta": 52,
+      "new_posts_count": 4,
+      "latest_post_ts": 1774177545917
+    },
+    {
+      "time": "2026-03-22 20:30",
+      "date": "2026-03-22",
+      "official_count": 65848,
+      "baseline_delta": 62,
+      "new_posts_count": 10,
+      "latest_post_ts": 1774182600012
+    },
+    {
+      "time": "2026-03-22 21:37",
+      "date": "2026-03-22",
+      "official_count": 65850,
+      "baseline_delta": 64,
+      "new_posts_count": 2,
+      "latest_post_ts": 1774184071041
+    },
+    {
+      "time": "2026-03-22 22:19",
+      "date": "2026-03-22",
+      "official_count": 65852,
+      "baseline_delta": 66,
+      "new_posts_count": 3,
+      "latest_post_ts": 1774188910897
+    },
+    {
+      "time": "2026-03-22 23:17",
+      "date": "2026-03-22",
+      "official_count": 65849,
+      "baseline_delta": 63,
+      "new_posts_count": 7,
+      "latest_post_ts": 1774192009655
+    },
+    {
+      "time": "2026-03-23 00:19",
+      "date": "2026-03-23",
+      "official_count": 65848,
+      "baseline_delta": 62,
+      "new_posts_count": 1,
+      "latest_post_ts": 1774195205495
+    },
+    {
+      "time": "2026-03-23 01:18",
+      "date": "2026-03-23",
+      "official_count": 65847,
+      "baseline_delta": 61,
+      "new_posts_count": 1,
+      "latest_post_ts": 1774197317401
+    },
+    {
+      "time": "2026-03-23 02:24",
+      "date": "2026-03-23",
+      "official_count": 65842,
+      "baseline_delta": 56,
+      "new_posts_count": 3,
+      "latest_post_ts": 1774201411226
+    },
+    {
+      "time": "2026-03-23 03:19",
+      "date": "2026-03-23",
+      "official_count": 65765,
+      "baseline_delta": -21,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774201411226
+    },
+    {
+      "time": "2026-03-23 04:16",
+      "date": "2026-03-23",
+      "official_count": 65765,
+      "baseline_delta": -21,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774201411226
+    },
+    {
+      "time": "2026-03-23 05:18",
+      "date": "2026-03-23",
+      "official_count": 65765,
+      "baseline_delta": -21,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774201411226
+    },
+    {
+      "time": "2026-03-23 06:16",
+      "date": "2026-03-23",
+      "official_count": 65757,
+      "baseline_delta": -29,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774201411226
+    },
+    {
+      "time": "2026-03-23 07:18",
+      "date": "2026-03-23",
+      "official_count": 65758,
+      "baseline_delta": -28,
+      "new_posts_count": 1,
+      "latest_post_ts": 1774219900797
+    },
+    {
+      "time": "2026-03-23 09:21",
+      "date": "2026-03-23",
+      "official_count": 65761,
+      "baseline_delta": -25,
+      "new_posts_count": 3,
+      "latest_post_ts": 1774226512330
+    },
+    {
+      "time": "2026-03-23 12:20",
+      "date": "2026-03-23",
+      "official_count": 65766,
+      "baseline_delta": -20,
+      "new_posts_count": 6,
+      "latest_post_ts": 1774239242378
+    },
+    {
+      "time": "2026-03-23 14:05",
+      "date": "2026-03-23",
+      "official_count": 65753,
+      "baseline_delta": -33,
+      "new_posts_count": 2,
+      "latest_post_ts": 1774245626349
+    },
+    {
+      "time": "2026-03-23 15:56",
+      "date": "2026-03-23",
+      "official_count": 65752,
+      "baseline_delta": -34,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774245626349
+    },
+    {
+      "time": "2026-03-23 16:50",
+      "date": "2026-03-23",
+      "official_count": 65758,
+      "baseline_delta": -28,
+      "new_posts_count": 6,
+      "latest_post_ts": 1774255527414
+    },
+    {
+      "time": "2026-03-23 17:55",
+      "date": "2026-03-23",
+      "official_count": 65758,
+      "baseline_delta": -28,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774255527414
+    },
+    {
+      "time": "2026-03-23 18:44",
+      "date": "2026-03-23",
+      "official_count": 65758,
+      "baseline_delta": -28,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774255527414
+    },
+    {
+      "time": "2026-03-23 19:38",
+      "date": "2026-03-23",
+      "official_count": 65759,
+      "baseline_delta": -27,
+      "new_posts_count": 1,
+      "latest_post_ts": 1774265400093
+    },
+    {
+      "time": "2026-03-23 20:44",
+      "date": "2026-03-23",
+      "official_count": 65763,
+      "baseline_delta": -23,
+      "new_posts_count": 5,
+      "latest_post_ts": 1774269401086
+    },
+    {
+      "time": "2026-03-23 22:09",
+      "date": "2026-03-23",
+      "official_count": 65767,
+      "baseline_delta": -19,
+      "new_posts_count": 4,
+      "latest_post_ts": 1774271276860
+    },
+    {
+      "time": "2026-03-23 23:53",
+      "date": "2026-03-23",
+      "official_count": 65770,
+      "baseline_delta": -16,
+      "new_posts_count": 4,
+      "latest_post_ts": 1774279764620
+    },
+    {
+      "time": "2026-03-24 00:47",
+      "date": "2026-03-24",
+      "official_count": 65772,
+      "baseline_delta": -14,
+      "new_posts_count": 2,
+      "latest_post_ts": 1774284246024
+    },
+    {
+      "time": "2026-03-24 01:44",
+      "date": "2026-03-24",
+      "official_count": 65771,
+      "baseline_delta": -15,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774284246024
+    },
+    {
+      "time": "2026-03-24 02:40",
+      "date": "2026-03-24",
+      "official_count": 65767,
+      "baseline_delta": -19,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774284246024
+    },
+    {
+      "time": "2026-03-24 03:41",
+      "date": "2026-03-24",
+      "official_count": 65767,
+      "baseline_delta": -19,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774284246024
+    },
+    {
+      "time": "2026-03-24 04:29",
+      "date": "2026-03-24",
+      "official_count": 65767,
+      "baseline_delta": -19,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774284246024
+    },
+    {
+      "time": "2026-03-24 05:27",
+      "date": "2026-03-24",
+      "official_count": 65767,
+      "baseline_delta": -19,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774284246024
+    },
+    {
+      "time": "2026-03-24 06:23",
+      "date": "2026-03-24",
+      "official_count": 65767,
+      "baseline_delta": -19,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774284246024
+    },
+    {
+      "time": "2026-03-24 07:23",
+      "date": "2026-03-24",
+      "official_count": 65767,
+      "baseline_delta": -19,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774284246024
+    },
+    {
+      "time": "2026-03-24 09:14",
+      "date": "2026-03-24",
+      "official_count": 65772,
+      "baseline_delta": -14,
+      "new_posts_count": 5,
+      "latest_post_ts": 1774314026209
+    },
+    {
+      "time": "2026-03-24 12:09",
+      "date": "2026-03-24",
+      "official_count": 65776,
+      "baseline_delta": -10,
+      "new_posts_count": 4,
+      "latest_post_ts": 1774324199617
+    },
+    {
+      "time": "2026-03-24 13:54",
+      "date": "2026-03-24",
+      "official_count": 65776,
+      "baseline_delta": -10,
+      "new_posts_count": 1,
+      "latest_post_ts": 1774331560614
+    },
+    {
+      "time": "2026-03-24 14:54",
+      "date": "2026-03-24",
+      "official_count": 65776,
+      "baseline_delta": -10,
+      "new_posts_count": 0,
+      "latest_post_ts": 1774331560614
     }
   ],
-  "daily": [],
+  "daily": [
+    {
+      "date": "2026-03-21",
+      "total_new_posts": 33,
+      "official_start": 65786,
+      "official_end": 65804,
+      "official_growth": 18
+    },
+    {
+      "date": "2026-03-22",
+      "total_new_posts": 84,
+      "official_start": 65798,
+      "official_end": 65849,
+      "official_growth": 51
+    },
+    {
+      "date": "2026-03-23",
+      "total_new_posts": 37,
+      "official_start": 65848,
+      "official_end": 65770,
+      "official_growth": -78
+    }
+  ],
   "today": {
-    "date": "2026-03-21",
-    "total_new_posts": 3,
-    "official_latest": 65787,
-    "hours_recorded": 2
+    "date": "2026-03-24",
+    "total_new_posts": 12,
+    "official_latest": 65776,
+    "hours_recorded": 12
   }
 }
