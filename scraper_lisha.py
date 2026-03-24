@@ -246,10 +246,7 @@ def run():
 
     data = load_data()
 
-    # 确保 baseline 存在（兼容旧数据）
-    if "baseline" not in data:
-        # baseline 在首次爬取时自动设置
-    pass
+    # baseline 在首次爬取时自动设置（见下方）
 
     # ── 确定 since_ts：上次记录的「最新帖子」时间戳 ──
     # 用 latest_post_ts 字段（最新），不是 earliest
