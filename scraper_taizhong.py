@@ -246,12 +246,6 @@ def run():
 
     data = load_data()
 
-    # 首次爬到数据时自动设定 baseline
-    if not data.get("baseline") or data["baseline"].get("count") is None:
-        if official_count is not None:
-            data["baseline"] = {"count": official_count, "time": now_str}
-            print(f"[info] 首次设定 baseline: {official_count} @ {now_str}")
-
     # ── 确定 since_ts：上次记录的「最新帖子」时间戳 ──
     # 用 latest_post_ts 字段（最新），不是 earliest
     since_ts = 0
@@ -266,6 +260,12 @@ def run():
     session        = get_session()
     official_count = fetch_official_count(session)
     new_posts      = fetch_new_posts(session, since_ts)
+
+    # 首次爬到数据时自动设定 baseline
+    if not data.get("baseline") or data["baseline"].get("count") is None:
+        if official_count is not None:
+            data["baseline"] = {"count": official_count, "time": now_str}
+            print(f"[info] 首次设定 baseline: {official_count} @ {now_str}")
 
     new_count  = len(new_posts)
     # 记录这批帖子里「最新那篇」的时间戳，下次用作截止点
