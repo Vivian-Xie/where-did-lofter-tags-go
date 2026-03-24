@@ -25,16 +25,26 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Run scraper
+      - name: Run scraper (刃恒)
         env:
           LOFTER_AUTH: ${{ secrets.LOFTER_AUTH }}
         run: python scraper.py
+
+      - name: Run scraper (理砂)
+        env:
+          LOFTER_AUTH: ${{ secrets.LOFTER_AUTH }}
+        run: python scraper_lisha.py
+
+      - name: Run scraper (太中)
+        env:
+          LOFTER_AUTH: ${{ secrets.LOFTER_AUTH }}
+        run: python scraper_taizhong.py
 
       - name: Commit and push data
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/records.json
+          git add data/records.json data/lisha_records.json data/taizhong_records.json
           # 如果没有变化就不 commit（避免空提交报错）
           git diff --staged --quiet || git commit -m "chore: update records $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push
