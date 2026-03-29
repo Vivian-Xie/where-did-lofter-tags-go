@@ -196,6 +196,97 @@ def fetch_new_posts(session: requests.Session, since_ts_ms: int) -> list:
 
 # ── 结算 ──────────────────────────────────────────────────────────────────────
 
+# ── 重新爬取指定日期当天发布的所有现存帖子 ────────────────────────────────────
+
+def fetch_posts_for_day(session: requests.Session, date_str: str) -> int:
+    """
+    0 点结算专用：翻取 tag 最新列表，统计 publishTime 落在 date_str 当天
+    (CST 00:00 ~ 23:59) 的帖子数量。
+    只计现在还存在的帖子（已删帖自然不会出现在列表里）。
+    遇到比当天更早的帖子就停止翻页。
+    """
+    day_start = int(datetime.strptime(date_str + " 00:00:00", "%Y-%m-%d %H:%M:%S")
+                    .replace(tzinfo=CST).timestamp() * 1000)
+    day_end   = int(datetime.strptime(date_str + " 23:59:59", "%Y-%m-%d %H:%M:%S")
+                    .replace(tzinfo=CST).timestamp() * 1000)
+
+    get_num   = 100
+    got_num   = 0
+    count     = 0
+    seen      = set()
+
+    data = {
+        "callCount":       "1",
+        "httpSessionId":   "",
+        "scriptSessionId": "${scriptSessionId}187",
+        "c0-id":           "0",
+        "batchId":         "870178",
+        "c0-scriptName":   "TagBean",
+        "c0-methodName":   "search",
+        "c0-param0":       f"string:{TAG_NAME}",
+        "c0-param1":       "number:0",
+        "c0-param2":       "string:",
+        "c0-param3":       "string:new",
+        "c0-param4":       "boolean:false",
+        "c0-param5":       "number:0",
+        "c0-param6":       f"number:{get_num}",
+        "c0-param7":       f"number:{got_num}",
+        "c0-param8":       f"number:{int(time.time() * 1000)}",
+    }
+
+    while True:
+        try:
+            resp    = session.post(DWR_URL, data=data, timeout=20)
+            content = resp.content.decode("utf-8")
+        except Exception as e:
+            print(f"[error] fetch_posts_for_day DWR 失败: {e}")
+            break
+
+        chunks = content.split("activityTags")[1:]
+        if not chunks:
+            break
+
+        stop = False
+        for chunk in chunks:
+            pm = re.search(r's\d+\.permalink="(.*?)"', chunk)
+            if not pm:
+                continue
+            permalink = pm.group(1)
+            if permalink in seen:
+                continue
+            seen.add(permalink)
+
+            ts_m = re.search(r's\d+\.publishTime=(\d+);', chunk)
+            if not ts_m:
+                continue
+            pub_ts = int(ts_m.group(1))
+
+            if pub_ts < day_start:
+                # 已经翻到比昨天更早的帖子，停止
+                stop = True
+                break
+            if day_start <= pub_ts <= day_end:
+                count += 1
+
+        if stop:
+            break
+
+        got_num += get_num
+        if len(chunks) < get_num:
+            break
+
+        last_ts_m = re.search(r's\d+\.publishTime=(\d+);', chunks[-1])
+        if not last_ts_m:
+            break
+        data["c0-param6"] = f"number:{get_num}"
+        data["c0-param7"] = f"number:{got_num}"
+        data["c0-param8"] = f"number:{last_ts_m.group(1)}"
+        time.sleep(0.5)
+
+    print(f"[info] 重新爬取 {date_str} 现存帖子数: {count}")
+    return count
+
+
 def settle_today(data: dict, today_str: str):
     """每次爬取后都调用，实时更新 data['today']"""
     today_hourly = [r for r in data["hourly"] if r.get("date") == today_str]
@@ -210,29 +301,33 @@ def settle_today(data: dict, today_str: str):
     }
     print(f"[info] 今日实时: 用户发帖={total_new}, 官方参与={counts[-1] if counts else '—'}")
 
-def settle_yesterday(data: dict, yesterday_str: str):
-    """0 点时调用，把昨天数据归档到 daily"""
+def settle_yesterday(data: dict, yesterday_str: str, session: requests.Session):
+    """0 点时调用：重新爬取昨天现存帖子数，归档到 daily"""
     if any(d["date"] == yesterday_str for d in data["daily"]):
         print(f"[info] {yesterday_str} 已归档")
         return
     yest = [r for r in data["hourly"] if r.get("date") == yesterday_str]
     if not yest:
         return
-    total_new = sum(r.get("new_posts_count", 0) for r in yest)
-    counts    = [r["official_count"] for r in yest
-                 if r.get("official_count") is not None]
-    start     = counts[0]  if counts else None
-    end       = counts[-1] if counts else None
+
+    # 重新爬取昨天现存帖子数（已删帖不计）
+    actual_posts = fetch_posts_for_day(session, yesterday_str)
+
+    counts = [r["official_count"] for r in yest
+              if r.get("official_count") is not None]
+    start  = counts[0]  if counts else None
+    end    = counts[-1] if counts else None
     official_growth = (end - start) if (start is not None and end is not None) else None
 
     data["daily"].append({
         "date":            yesterday_str,
-        "total_new_posts": total_new,       # 当天用户发帖数
+        "total_new_posts": actual_posts,    # 重新爬取的现存帖子数
         "official_start":  start,
         "official_end":    end,
-        "official_growth": official_growth, # 正=增长 负=倒退
+        "official_growth": official_growth,
     })
-    print(f"[info] 归档 {yesterday_str}: 发帖={total_new}, 官方变化={official_growth}")
+    print(f"[info] 归档 {yesterday_str}: 现存发帖={actual_posts}, 官方变化={official_growth}")
+
 
 # ── 主函数 ────────────────────────────────────────────────────────────────────
 
@@ -285,7 +380,7 @@ def run():
     settle_today(data, today_str)
 
     if now.hour == 0:
-        settle_yesterday(data, yesterday_str)
+        settle_yesterday(data, yesterday_str, session)
 
     save_data(data)
     print(f"[info] 已保存 → {DATA_FILE}")
