@@ -4467,6 +4467,14 @@
       "baseline_delta": 1495,
       "new_posts_count": 16,
       "latest_post_ts": 1776782882381
+    },
+    {
+      "time": "2026-04-22 00:49",
+      "date": "2026-04-22",
+      "official_count": 67287,
+      "baseline_delta": 1501,
+      "new_posts_count": 7,
+      "latest_post_ts": 1776789357760
     }
   ],
   "daily": [
@@ -4672,12 +4680,19 @@
       "official_start": 67193,
       "official_end": 67238,
       "official_growth": 45
+    },
+    {
+      "date": "2026-04-21",
+      "total_new_posts": 16,
+      "official_start": 67247,
+      "official_end": 67281,
+      "official_growth": 34
     }
   ],
   "today": {
-    "date": "2026-04-21",
-    "total_new_posts": 56,
-    "official_latest": 67281,
-    "hours_recorded": 16
+    "date": "2026-04-22",
+    "total_new_posts": 7,
+    "official_latest": 67287,
+    "hours_recorded": 1
   }
 }
