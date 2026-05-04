@@ -5499,6 +5499,14 @@
       "baseline_delta": 240,
       "new_posts_count": 9,
       "latest_post_ts": 1777882341735
+    },
+    {
+      "time": "2026-05-04 18:57",
+      "date": "2026-05-04",
+      "official_count": 48588,
+      "baseline_delta": 242,
+      "new_posts_count": 3,
+      "latest_post_ts": 1777888740025
     }
   ],
   "daily": [
@@ -5757,8 +5765,8 @@
   ],
   "today": {
     "date": "2026-05-04",
-    "total_new_posts": 24,
-    "official_latest": 48586,
-    "hours_recorded": 11
+    "total_new_posts": 27,
+    "official_latest": 48588,
+    "hours_recorded": 12
   }
 }
